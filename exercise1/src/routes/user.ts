@@ -1,8 +1,9 @@
 import express from "express";
 import { createUser, getUser, getUserById } from "../controlller/user";
+import { auth } from "../middlewares/auth";
 const router = express();
 
-router.get("/", getUser);
+router.get("/", auth, getUser);
 router.get("/:id", getUserById);
 router.post("/", createUser);
 router.put("/:id", (req, res) => {
