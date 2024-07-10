@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import * as UserService from "../service/user";
 import { GetUserQuery } from "../interface/user";
+import HttpStatusCodes from "http-status-codes";
+import loggerWithNameSpace from "../utils/logger";
+const logger = loggerWithNameSpace("UserController");
 export function getUser(req: Request, res: Response) {
   const { query } = req;
   console.log(query);
@@ -13,14 +16,11 @@ export function getUserById(
   req: Request<any, any, GetUserQuery>,
   res: Response
 ) {
-  const { query } = req;
+  logger.info("Called getUserbyID");
+  const { id } = req.params;
 
-  // const { id } = req.params;
-  //   const { query } = req.params;
-  //   console.log(query, body);
-  const data = UserService.getUsers(query);
-  // const data = UserService.getUserById(id);
-  res.json(data);
+  const data = UserService.getUserById(id);
+  res.status(HttpStatusCodes.ACCEPTED).json(data);
 }
 
 export async function createUser(req: Request, res: Response) {
