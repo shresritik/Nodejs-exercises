@@ -3,6 +3,7 @@ import { NextFunction, Response } from "express";
 import HttpStatusCodes from "http-status-codes";
 import { UnauthenticatedError } from "../error/Unauthenticated";
 import loggerWithNameSpace from "../utils/logger";
+import { BadRequest } from "../error/BadRequest";
 const logger = loggerWithNameSpace("ErrorHandler");
 export function notFoundError(req: Request, res: Response) {
   return res.status(HttpStatusCodes.NOT_FOUND).json({
@@ -20,6 +21,11 @@ export function genericErrorHandler(
   }
   if (error instanceof UnauthenticatedError) {
     return res.status(HttpStatusCodes.UNAUTHORIZED).json({
+      message: error.message,
+    });
+  }
+  if (error instanceof BadRequest) {
+    return res.status(HttpStatusCodes.BAD_REQUEST).json({
       message: error.message,
     });
   }

@@ -1,11 +1,13 @@
 import express from "express";
 import { createUser, getUser, getUserById } from "../controlller/user";
 import { authenticate, authorize } from "../middlewares/auth";
+import { validateReqBody, validateReqQuery } from "../middlewares/validator";
+import { getUserQuerySchema, createUserBodySchema } from "../schema/user";
 const router = express();
 
-router.get("/", authenticate, authorize("users.get"), getUser);
+router.get("/", validateReqQuery(getUserQuerySchema), getUser);
 router.get("/:id", getUserById);
-router.post("/", createUser);
+router.post("/", validateReqBody(createUserBodySchema), createUser);
 router.put("/:id", (req, res) => {
   res.json({ message: "users put" });
 });
