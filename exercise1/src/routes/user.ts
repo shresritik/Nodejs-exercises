@@ -7,7 +7,13 @@ const router = express();
 
 router.get("/", validateReqQuery(getUserQuerySchema), getUser);
 router.get("/:id", getUserById);
-router.post("/", validateReqBody(createUserBodySchema), createUser);
+router.post(
+  "/",
+  authenticate,
+  authorize("user.post"),
+  validateReqBody(createUserBodySchema),
+  createUser
+);
 router.put("/:id", (req, res) => {
   res.json({ message: "users put" });
 });
