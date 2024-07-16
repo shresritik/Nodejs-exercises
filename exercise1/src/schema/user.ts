@@ -2,9 +2,24 @@ import Joi from "joi";
 
 export const getUserQuerySchema = Joi.object({
   q: Joi.string().optional(),
-  page: Joi.number().optional().messages({
-    "number.base": "Page must be a number",
-  }),
+  page: Joi.number()
+    .min(1)
+    .optional()
+    .messages({
+      "number.base": "Page must be a number",
+      "page.base": "Page must be greater than 0",
+    })
+    .default(1),
+  size: Joi.number()
+    .min(1)
+    .max(10)
+    .optional()
+    .messages({
+      "number.base": "Size must be a number",
+      "number.min": "Size must greater than 0",
+      "number.max": "Size must less than 11",
+    })
+    .default(10),
 }).options({
   stripUnknown: true,
 });

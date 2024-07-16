@@ -20,11 +20,30 @@ export function getUserByEmail(email: string) {
 }
 export async function createUser(user: User) {
   const password = await bcrypt.hash(user.password, 10);
-  return UserModel.createUser({ ...user, password });
+  const data = await UserModel.UserModel.create({ ...user, password });
+  console.log(data);
+  return data;
 }
-export function getUsers(user: GetUserQuery) {
-  return UserModel.getUsers(user);
+export async function updateUser(id: string, user: User) {
+  const password = await bcrypt.hash(user.password, 10);
+  const data = await UserModel.UserModel.update(id, { ...user, password });
+  console.log(data);
 }
-export function getAllUsers() {
-  return UserModel.getAllUsers();
+export async function deleteUser(id: string) {
+  await UserModel.UserModel.delete(id);
+  return { message: "user deleted" };
+}
+export async function getUsers(query: GetUserQuery) {
+  const data = await UserModel.UserModel.getUsers(query);
+  const count = await UserModel.UserModel.count(query);
+  const meta = {
+    page: query.page,
+    size: data.length,
+    total: +count.count,
+  };
+  return { data, meta };
+}
+
+export async function getAllUsers() {
+  return await UserModel.getAllUsers();
 }

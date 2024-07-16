@@ -7,4 +7,6 @@ export interface User {
 }
 export interface GetUserQuery {
   q?: string;
+  page?: number;
+  size?: number;
 }
